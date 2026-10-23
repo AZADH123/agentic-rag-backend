@@ -1,0 +1,1 @@
+"""Utility helpers — small, dependency-free, reusable."""

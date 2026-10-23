@@ -1,0 +1,11 @@
+-r requirements.txt
+
+# Linting / formatting
+ruff==0.7.4
+black==24.10.0
+isort==5.13.2
+mypy==1.13.0
+
+# Dev server reload + debugging
+ipdb==0.13.13
+ipython==8.29.0

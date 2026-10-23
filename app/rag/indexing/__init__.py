@@ -1,0 +1,1 @@
+"""Indexing: write chunks + embeddings to pgvector."""

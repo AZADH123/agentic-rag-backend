@@ -1,0 +1,1 @@
+"""Embedding models — pluggable interface + BGE implementation."""

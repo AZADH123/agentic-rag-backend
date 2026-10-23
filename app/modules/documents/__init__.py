@@ -1,0 +1,1 @@
+"""Document module: source-file metadata & lifecycle management."""

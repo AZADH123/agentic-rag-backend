@@ -1,0 +1,38 @@
+[project]
+name = "agentic-rag-backend"
+version = "0.1.0"
+description = "Modular backend-only Agentic RAG platform: FastAPI + Gemini + BGE + pgvector + Taskiq + MCP"
+requires-python = ">=3.11"
+authors = [{ name = "You" }]
+readme = "README.md"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = ["app/database/migrations/versions"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "B", "SIM", "RET"]
+ignore = ["E501", "B008"]  # E501 handled by line-length, B008 FastAPI Depends() in defaults
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.isort]
+profile = "black"
+line_length = 100
+known_first_party = ["app"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = false
+ignore_missing_imports = true
+plugins = ["pydantic.mypy"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["app*"]

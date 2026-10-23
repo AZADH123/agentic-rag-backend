@@ -1,0 +1,1 @@
+"""LLM integration — Gemini-specific client isolated from agent logic."""
