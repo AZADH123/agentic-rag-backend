@@ -1,0 +1,5 @@
+export { default as DashboardPage } from './DashboardPage'
+export { default as DocumentsPage } from './DocumentsPage'
+export { default as ChatPage } from './ChatPage'
+export { default as RetrievalPage } from './RetrievalPage'
+export { default as ToolsPage } from './ToolsPage'

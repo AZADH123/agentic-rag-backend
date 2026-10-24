@@ -110,7 +110,7 @@ class GeminiClient:
                 automatic_function_calling=afc if tools else None,
             )
 
-            sdk_contents = []
+            sdk_contents: list[Any] = []
 
             for content in contents:
                 # Already a typed Gemini Content object.
@@ -119,8 +119,12 @@ class GeminiClient:
                     continue
 
                 role = _get_value(content, "role", "user")
+                # Gemini expects function/tool responses under the "user" role
+                if role == "tool":
+                    role = "user"
+
                 raw_parts = _get_value(content, "parts", []) or []
-                sdk_parts = []
+                sdk_parts: list[Any] = []
 
                 for part in raw_parts:
                     # Preserve existing SDK Part objects, including
@@ -133,6 +137,44 @@ class GeminiClient:
 
                     elif isinstance(part, dict) and "text" in part:
                         sdk_parts.append(types.Part(text=part["text"]))
+
+                    elif isinstance(part, dict) and "function_response" in part:
+                        fr = part["function_response"]
+                        fn_name = fr.get("name", "")
+                        fn_resp = fr.get("response", {})
+                        if hasattr(types.Part, "from_function_response"):
+                            sdk_parts.append(
+                                types.Part.from_function_response(
+                                    name=fn_name, response=fn_resp
+                                )
+                            )
+                        else:
+                            sdk_parts.append(
+                                types.Part(
+                                    function_response=types.FunctionResponse(
+                                        name=fn_name, response=fn_resp
+                                    )
+                                )
+                            )
+
+                    elif isinstance(part, dict) and "function_call" in part:
+                        fc = part["function_call"]
+                        fn_name = fc.get("name", "")
+                        fn_args = fc.get("args", {})
+                        if hasattr(types.Part, "from_function_call"):
+                            sdk_parts.append(
+                                types.Part.from_function_call(
+                                    name=fn_name, args=fn_args
+                                )
+                            )
+                        else:
+                            sdk_parts.append(
+                                types.Part(
+                                    function_call=types.FunctionCall(
+                                        name=fn_name, args=fn_args
+                                    )
+                                )
+                            )
 
                     elif _get_value(part, "text") is not None:
                         sdk_parts.append(
